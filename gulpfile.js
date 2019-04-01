@@ -50,7 +50,7 @@ gulp.task('minifycssmd5', function() {
 //imgmd5，压缩后并用md5进行命名，下面使用revCollector进行路径替换
 gulp.task('minifyimgmd5', function() {
   return gulp
-    .src(['src/img/**/*.jpg', 'img/**/*.png', 'img/**/*.gif'])
+    .src(['src/img/**/*.jpg', 'src/img/**/*.png', 'src/img/**/*.gif', 'img/**/*.png', 'img/**/*.gif'])
     .pipe(rev()) // 文件名加MD5后缀
     .pipe(gulp.dest(buildBasePath + 'img')) // 输出到css目录
     .pipe(rev.manifest('rev-img-manifest.json')) // 生成一个rev-manifest.json
@@ -106,8 +106,8 @@ gulp.task('default', function(cb) {
     'minifycssmd5',
     'minifyimgmd5',
     'html',
-    'replacejs',
-    'replacecss',
+    // 'replacejs',
+    // 'replacecss',
     'rev',
     'revimg'
   )(cb);
