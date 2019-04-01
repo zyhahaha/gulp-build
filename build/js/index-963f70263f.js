@@ -1,0 +1,1 @@
+function test(){alert(1234)}test();
