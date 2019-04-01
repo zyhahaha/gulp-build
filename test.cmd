@@ -1,5 +1,7 @@
+set input=%1%
+
 git add .
 
-git commit -m " test "
+git commit -m %input%
 
 git push
