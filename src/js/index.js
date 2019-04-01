@@ -3,7 +3,7 @@ function test() {
 }
 test();
 
-// let aaa = {
-//   aa: 1,
-//   test
-// }
+let aaa = {
+  aa: 1,
+  test
+}

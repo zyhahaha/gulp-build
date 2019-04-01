@@ -11,6 +11,7 @@ var removeEmptyLines = require('gulp-remove-empty-lines'); // 清除空白行，
 var replace = require('gulp-replace'); // 文件名替换，参考：https://www.npmjs.com/package/gulp-replace
 var gulpSequence = require('gulp-sequence'); // 同步执行，参考：https://github.com/teambition/gulp-sequence
 var clean = require('gulp-clean'); // 清除文件插件，参考：https://github.com/teambition/gulp-clean
+const babel = require('gulp-babel');
 
 var buildBasePath = 'build/'; // 构建输出的目录
 
@@ -29,6 +30,9 @@ gulp.task('copy', function() {
 gulp.task('minifyjsmd5', function() {
   return gulp
     .src('src/js/**/*.js')
+    .pipe(babel({
+      presets: ['es2015']
+    }))
     //  .pipe(concat('build.min.js')) // 压缩后的js -- flag 合并js
     .pipe(uglify()) // 压缩js到一行
     .pipe(rev()) // 文件名加MD5后缀
