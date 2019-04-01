@@ -23,22 +23,8 @@ gulp.task('clean:Build', function(cb) {
 gulp.task('copy', function() {
   return gulp.src('plugins/**/*').pipe(gulp.dest(buildBasePath + 'plugins'));
 });
-//  gulp.task('copyimg', function() {
-//    // 如果下面执行了md5资源文件img，那么这步可以省略
-//    return gulp.src('src/img/**/*').pipe(gulp.dest(buildBasePath + 'img'));
-//  });
 
 // 合并js,css文件之后压缩代码
-// js
-gulp.task('minifyjs', function() {
-  return gulp
-    .src('src/js/**/*.js')
-    .pipe(concat('build.js')) // 合成到一个js
-    .pipe(gulp.dest(buildBasePath + 'js')) // 输出到js目录
-    .pipe(uglify()) // 压缩js到一行
-    .pipe(concat('build.min.js')) // 压缩后的js
-    .pipe(gulp.dest(buildBasePath + 'js')); // 输出到js目录
-});
 //jsmd5，压缩后并用md5进行命名，下面使用revCollector进行路径替换
 gulp.task('minifyjsmd5', function() {
   return gulp
@@ -49,16 +35,6 @@ gulp.task('minifyjsmd5', function() {
     .pipe(gulp.dest(buildBasePath + 'js')) // 输出到js目录
     .pipe(rev.manifest('rev-js-manifest.json')) // //生成一个rev-manifest.json
     .pipe(gulp.dest('rev')); // 将 rev-manifest.json 保存到 rev 目录内
-});
-//css
-gulp.task('minifycss', function() {
-  return gulp
-    .src('src/css/**/*.css')
-    .pipe(concat('build.css')) // 合成到一个css
-    .pipe(gulp.dest(buildBasePath + 'css')) // 输出到css目录
-    .pipe(minifyCss()) // 压缩css到一样
-    .pipe(concat('build.min.css')) // 压缩后的css
-    .pipe(gulp.dest(buildBasePath + 'css')); // 输出到css目录
 });
 //cssmd5，压缩后并用md5进行命名，下面使用revCollector进行路径替换
 gulp.task('minifycssmd5', function() {
@@ -101,35 +77,6 @@ gulp.task('html', function() {
     .pipe(gulp.dest(buildBasePath));
 });
 
-// 生产使用，替换文件名，common.js替换为build.min.js
-gulp.task('replacejs', function() {
-  return gulp
-    .src([buildBasePath + '*.html'])
-    .pipe(replace('common.js', 'build.min.js'))
-    .pipe(gulp.dest(buildBasePath));
-});
-// 生产使用，替换文件名，common.css替换为build.min.css
-gulp.task('replacecss', function() {
-  return gulp
-    .src([buildBasePath + '*.html'])
-    .pipe(replace('common.css', 'build.min.css'))
-    .pipe(gulp.dest(buildBasePath));
-});
-// 开发使用，替换文件名，common.js替换为build.js
-gulp.task('replacejsdev', function() {
-  return gulp
-    .src([buildBasePath + '*.html'])
-    .pipe(replace('common.js', 'build.js'))
-    .pipe(gulp.dest(buildBasePath));
-});
-// 开发使用，替换文件名，common.css替换为build.css
-gulp.task('replacecssdev', function() {
-  return gulp
-    .src([buildBasePath + '*.html'])
-    .pipe(replace('common.css', 'build.css'))
-    .pipe(gulp.dest(buildBasePath));
-});
-
 // 使用rev替换成md5文件名，这里包括html和css的资源文件也一起
 gulp.task('rev', function() {
   // html，针对js,css,img
@@ -150,14 +97,6 @@ gulp.task('revimg', function() {
 gulp.task('watch', function() {
   gulp.watch('**/*.html', ['default']);
 });
-// 监视文件的变化，有修改时，自动调用default2缺省默认任务
-gulp.task('watch2', function() {
-  gulp.watch('**/*.html', ['default2']);
-});
-// 监视文件的变化，有修改时，自动调用defaultdev缺省默认任务
-gulp.task('watchdev', function() {
-  gulp.watch('**/*.html', ['defaultdev']);
-});
 
 gulp.task('default', function(cb) {
   gulpSequence(
@@ -171,31 +110,5 @@ gulp.task('default', function(cb) {
     'replacecss',
     'rev',
     'revimg'
-  )(cb);
-});
-
-gulp.task('default2', function(cb) {
-  gulpSequence(
-    'clean:Build',
-    'copy',
-    'copyimg',
-    'minifyjs',
-    'minifycss',
-    'html',
-    'replacejs',
-    'replacecss'
-  )(cb);
-});
-
-gulp.task('defaultdev', function(cb) {
-  gulpSequence(
-    'clean:Build',
-    'copy',
-    'copyimg',
-    'minifyjs',
-    'minifycss',
-    'html',
-    'replacejsdev',
-    'replacecssdev'
   )(cb);
 });
